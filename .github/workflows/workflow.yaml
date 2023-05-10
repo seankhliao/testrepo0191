@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          curl -H "Authorization: bearer  $ACTIONS_RUNTIME_TOKEN" $ACTIONS_ID_TOKEN_REQUEST_URL  -H "Accept: application/json; api-version=2.0" -H "Content-Type: application/json" -d "{}" | jq .
+          curl -H "Authorization: bearer  $ACTIONS_RUNTIME_TOKEN" $ACTIONS_ID_TOKEN_REQUEST_URL  -H "Accept: application/json; api-version=2.0" -H "Content-Type: application/json" -d "{}" -v
