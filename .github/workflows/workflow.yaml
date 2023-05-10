@@ -8,6 +8,11 @@ permissions:
 jobs:
   job:
     runs-on: ubuntu-latest
+    services:
+      dex:
+        image: ghcr.io/seankhliao/dex-config
+        ports:
+          - 80:8080
     steps:
       # Actions have access to two special environment variables ACTIONS_CACHE_URL and ACTIONS_RUNTIME_TOKEN. Inline step scripts in workflows do not see these variables. 
       - uses: actions/github-script@v6
@@ -21,5 +26,12 @@ jobs:
             core.setOutput('TOKEN', token.trim())
             core.setOutput('IDTOKENURL', runtimeUrl.trim())
       - run: |
-          curl -H "Authorization: bearer  ${{steps.script.outputs.TOKEN}}" ${{steps.script.outputs.IDTOKENURL}}  -H "Accept: application/json; api-version=2.0" -H "Content-Type: application/json" -d "{}" -v
+          GH_TOKEN_RES=$(curl -H "Authorization: bearer  ${{steps.script.outputs.TOKEN}}" ${{steps.script.outputs.IDTOKENURL}}  -H "Accept: application/json; api-version=2.0" -H "Content-Type: application/json" -d "{}")
+          # output: {"count":1844,"value":"***"}
+
+          GH_ID_TOKEN=$(jq -r .value <<< $GH_TOKEN_RES)
+
+          curl -v http://dex/.well-known/openid-configuration
+
+          curl -v http://dex/token -d "subject_token=$GH_ID_TOKEN&subject_token_type=urn:ietf:params:oauth:token-type:id_token&audience=circleci&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&requested_token_type=urn:ietf:params:oauth:token-type:id_token&scope=groups openid federated:id"
         id: idtoken
