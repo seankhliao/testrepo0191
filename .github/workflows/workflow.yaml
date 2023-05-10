@@ -1,0 +1,15 @@
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get token
+        run: |
+          curl -H "Authorization: bearer  $ACTIONS_RUNTIME_TOKEN" $ACTIONS_ID_TOKEN_REQUEST_URL  -H "Accept: application/json; api-version=2.0" -H "Content-Type: application/json" -d "{}" | jq .
