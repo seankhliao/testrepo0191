@@ -33,5 +33,5 @@ jobs:
 
           curl -v http://127.0.0.1/.well-known/openid-configuration
 
-          curl -v http://127.0.0.1/token -d "subject_token=$GH_ID_TOKEN&subject_token_type=urn:ietf:params:oauth:token-type:id_token&audience=circleci&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&requested_token_type=urn:ietf:params:oauth:token-type:id_token&scope=groups openid federated:id"
+          curl -v http://127.0.0.1/token -d "subject_token=$GH_ID_TOKEN&subject_token_type=urn:ietf:params:oauth:token-type:id_token&audience=circleci&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&requested_token_type=urn:ietf:params:oauth:token-type:id_token&scope=groups openid federated:id&audience=github-actions"
         id: idtoken
