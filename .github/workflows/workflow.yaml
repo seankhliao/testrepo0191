@@ -31,9 +31,15 @@ jobs:
 
           GH_ID_TOKEN=$(jq -r .value <<< $GH_TOKEN_RES)
 
+          echo "=== github token ==="
           echo $GH_ID_TOKEN | base64
 
           curl -v http://127.0.0.1/.well-known/openid-configuration
 
-          curl -v http://127.0.0.1/token -d "subject_token=$GH_ID_TOKEN&subject_token_type=urn:ietf:params:oauth:token-type:access_token&audience=github-actions&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&requested_token_type=urn:ietf:params:oauth:token-type:id_token&scope=groups openid federated:id"
+          DEX_TOKEN_RES=$(curl -v http://127.0.0.1/token -d "subject_token=$GH_ID_TOKEN&subject_token_type=urn:ietf:params:oauth:token-type:access_token&audience=github-actions&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&requested_token_type=urn:ietf:params:oauth:token-type:id_token&scope=groups openid federated:id")
+
+          DEX_ID_TOKEN=$(jq -r .access_token <<< $DEX_TOKEN_RES)
+
+          echo "=== dex token ==="
+          echo $DEX_ID_TOKEN | base64
         id: idtoken
