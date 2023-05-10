@@ -1,0 +1,17 @@
+issuer: http://127.0.0.1:5556/
+storage:
+  type: sqlite3
+  config:
+    file: dex.db
+web:
+  http: 0.0.0.0:8080
+connectors:
+- type: oidc
+  id: github-actions
+  name: github-actions
+  config:
+    issuer: https://token.actions.githubusercontent.com
+    scopes:
+      - openid
+      - groups
+    userNameKey: sub
