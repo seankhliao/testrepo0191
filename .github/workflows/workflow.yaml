@@ -46,6 +46,7 @@ jobs:
                 http://127.0.0.1/token \
                 --user my-app:my-secret \
                 --data-urlencode connector_id="$3" \
+                --data-urlencode grant_type=urn:ietf:params:oauth:grant-type:token-exchange \
                 --data-urlencode scope="openid groups federated:id" \
                 --data-urlencode requested_token_type="$2" \
                 --data-urlencode subject_token="$GH_ID_TOKEN" \
