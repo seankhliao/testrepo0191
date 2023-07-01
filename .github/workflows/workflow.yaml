@@ -42,7 +42,14 @@ jobs:
           export TYPE_ID=urn:ietf:params:oauth:token-type:id_token
 
           function exchange() {
-            DEX_TOKEN_RES=$(curl -v http://127.0.0.1/token -d "subject_token=$GH_ID_TOKEN&subject_token_type=$1&audience=$3&grant_type=urn:ietf:params:oauth:grant-type:token-exchange&requested_token_type=$2&scope=groups openid federated:id")
+            DEX_TOKEN_RES=$(curl -v \
+                http://127.0.0.1/token \
+                --user my-app:my-secret \
+                --url-query connector_id="$3" \
+                --url-query scope="openid groups federated:id" \
+                --url-query requested_token_type="$2" \
+                --url-query subject_token="$GH_ID_TOKEN" \
+                --url-query subject_token_type="$1")
             DEX_ID_TOKEN=$(jq -r .access_token <<< $DEX_TOKEN_RES)
             echo "=== dex token ==="
             echo $DEX_ID_TOKEN | base64
@@ -59,19 +66,4 @@ jobs:
 
           echo "\n== access => access"
           exchange $TYPE_ACCESS $TYPE_ACCESS github-actions
-
-          echo "== getUserInfo =="
-
-          echo "\n== id => id"
-          exchange $TYPE_ID $TYPE_ID github-actions-2
-
-          echo "\n== id => access"
-          exchange $TYPE_ID $TYPE_ACCESS github-actions-2
-
-          echo "\n== access => id"
-          exchange $TYPE_ACCESS $TYPE_ID github-actions-2
-
-          echo "\n== access => access"
-          exchange $TYPE_ACCESS $TYPE_ACCESS github-actions-2
-
         id: idtoken
