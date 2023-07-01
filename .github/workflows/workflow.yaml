@@ -42,7 +42,7 @@ jobs:
           export TYPE_ID=urn:ietf:params:oauth:token-type:id_token
 
           function exchange() {
-            DEX_TOKEN_RES=$(curl -v -G \
+            DEX_TOKEN_RES=$(curl -v \
                 http://127.0.0.1/token \
                 --user my-app:my-secret \
                 --data-urlencode connector_id="$3" \
