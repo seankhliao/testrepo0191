@@ -42,14 +42,14 @@ jobs:
           export TYPE_ID=urn:ietf:params:oauth:token-type:id_token
 
           function exchange() {
-            DEX_TOKEN_RES=$(curl -v \
+            DEX_TOKEN_RES=$(curl -v -G \
                 http://127.0.0.1/token \
                 --user my-app:my-secret \
-                --url-query connector_id="$3" \
-                --url-query scope="openid groups federated:id" \
-                --url-query requested_token_type="$2" \
-                --url-query subject_token="$GH_ID_TOKEN" \
-                --url-query subject_token_type="$1")
+                --data-urlencode connector_id="$3" \
+                --data-urlencode scope="openid groups federated:id" \
+                --data-urlencode requested_token_type="$2" \
+                --data-urlencode subject_token="$GH_ID_TOKEN" \
+                --data-urlencode subject_token_type="$1")
             DEX_ID_TOKEN=$(jq -r .access_token <<< $DEX_TOKEN_RES)
             echo "=== dex token ==="
             echo $DEX_ID_TOKEN | base64
